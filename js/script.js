@@ -112,8 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     contactTimeline
-        .to("#hand-left", { x: "50vw", opacity: 1, duration: 4 }, 0) 
-        .to("#hand-right", { x: "-50vw", opacity: 1, duration: 4 }, 0); 
+        .to("#hand-left", { x: "20vw", xPercent: -50, opacity: 1, duration: 4 }, 0) 
+        .to("#hand-right", { x: "-20vw", xPercent: 50, opacity: 1, duration: 4 }, 0); 
     // 5. Kingdom Section: Title Reveal
     const kingdomTimeline = gsap.timeline({
         scrollTrigger: {
@@ -168,9 +168,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Add to clicked
                 item.classList.add('active');
                 
+                // Account for GSAP pin-spacer
+                let targetTop = target.offsetTop;
+                if (target.parentElement && target.parentElement.classList.contains('pin-spacer')) {
+                    targetTop = target.parentElement.offsetTop;
+                }
+                
                 // Scroll to section
                 window.scrollTo({
-                    top: target.offsetTop,
+                    top: targetTop,
                     behavior: 'smooth'
                 });
             }
@@ -184,10 +190,20 @@ document.addEventListener('DOMContentLoaded', () => {
         
         sections.forEach(id => {
             const el = document.getElementById(id);
-            if (el && scrollPos >= el.offsetTop && scrollPos < el.offsetTop + el.offsetHeight) {
-                navItems.forEach(item => {
-                    item.classList.toggle('active', item.getAttribute('data-section') === id);
-                });
+            if (el) {
+                let elTop = el.offsetTop;
+                let elHeight = el.offsetHeight;
+                
+                if (el.parentElement && el.parentElement.classList.contains('pin-spacer')) {
+                    elTop = el.parentElement.offsetTop;
+                    elHeight = el.parentElement.offsetHeight;
+                }
+
+                if (scrollPos >= elTop && scrollPos < elTop + elHeight) {
+                    navItems.forEach(item => {
+                        item.classList.toggle('active', item.getAttribute('data-section') === id);
+                    });
+                }
             }
         });
     });
@@ -262,35 +278,108 @@ document.addEventListener('DOMContentLoaded', () => {
         delay: 1,
     });
 
-    /* --- Horse Mouse Follow Logic --- */
-    const horse = document.querySelector('.horse-traveler');
-    const projectSection = document.getElementById('projects-section');
+    /* --- Shield Wheel Logic --- */
+    const projectsSection = document.getElementById('projects-section');
+    const wheel = document.getElementById('projects-wheel');
+    const nodes = document.querySelectorAll('.wheel-node');
+    const pdTitle = document.getElementById('pd-title');
+    const pdDesc = document.getElementById('pd-desc');
+    const pdImages = document.getElementById('pd-images');
+    const pdLink = document.getElementById('pd-link');
 
-    if (horse && projectSection) {
-        projectSection.addEventListener('mousemove', (e) => {
-            const rect = projectSection.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+    const projectData = {
+        vendor: {
+            title: "Vendor App",
+            desc: "Venue Booking App lets users browse, view, and book venues for events easily. I worked on user-side development focusing on API integration and functionality. Implemented features for venue browsing, booking, and smooth navigation. Handled API responses and displayed data effectively in the UI. Used Swagger for API testing and Figma for basic wireframe design. Built using Flutter, REST APIs, and Android UI with Git for version control.",
+            images: [],
+            link: "#"
+        },
+        furrr: {
+            title: "FURRR",
+            desc: "Furrr is a Flutter-based pet care app offering real-time AI insights for pet health and behavior. It includes features like a smart symptom checker, behavior analyzer, and interactive bark/play system. The app provides text-to-speech support for accessible AI results. It features premium UI with animations, mascots, and a soft themed design. Users can find nearby vets, access Indian pet food safety guides, and view a YouTube-based pet feed. Built with Flutter, Gemini AI, Google APIs, and advanced animation tools for a seamless experience.",
+            images: [
+                "assets/images/furrr-1.jpg",
+                "assets/images/furrr-2.jpg",
+                "assets/images/furrr-3.jpg",
+                "assets/images/furrr-4.jpg",
+                "assets/images/furrr-5.jpg"
+            ],
+            link: "https://github.com/gayathrii3/furrr_petcare_app.git"
+        }
+    };
 
-            // Constrain horse to map area
-            gsap.to(horse, {
-                left: x,
-                top: y,
-                duration: 0.8,
-                ease: "power2.out",
-                overwrite: "auto"
+    if (wheel && nodes.length > 0) {
+        // We wait a tick so offsetWidth is accurate
+        setTimeout(() => {
+            const radius = wheel.offsetWidth / 2;
+            const totalNodes = nodes.length;
+            const angleStep = 360 / totalNodes;
+            
+            // Position nodes
+            nodes.forEach((node, i) => {
+                const angleDeg = i * angleStep;
+                const angleRad = angleDeg * (Math.PI / 180);
+                
+                // Start from the left side (-x direction)
+                const x = Math.cos(angleRad + Math.PI) * radius; 
+                const y = Math.sin(angleRad + Math.PI) * radius;
+                
+                gsap.set(node, { x: x, y: y });
             });
-        });
 
-        // Reset horse position when mouse leaves the section
-        projectSection.addEventListener('mouseleave', () => {
-            gsap.to(horse, {
-                left: "22%", // Reset to original 'forward' position
-                top: "25%",
-                duration: 1.5,
-                ease: "power3.inOut"
+            // ScrollTrigger for the wheel pinning and rotating
+            gsap.to(wheel, {
+                rotation: 360, 
+                ease: "none",
+                scrollTrigger: {
+                    trigger: projectsSection,
+                    start: "top top",
+                    end: "+=2000", // Pin for 2000px of scrolling
+                    scrub: 1,
+                    pin: true,
+                    onUpdate: (self) => {
+                        const currentRotation = self.progress * 360;
+                        // Counter-rotate the icons so they stay upright
+                        gsap.set(".node-icon i", {
+                            rotation: -currentRotation
+                        });
+                    }
+                }
             });
-        });
+
+            // Node click handlers
+            nodes.forEach(node => {
+                node.addEventListener('click', () => {
+                    nodes.forEach(n => n.classList.remove('active'));
+                    node.classList.add('active');
+
+                    const key = node.getAttribute('data-project');
+                    if (key && projectData[key]) {
+                        const data = projectData[key];
+                        pdTitle.textContent = data.title;
+                        pdDesc.textContent = data.desc;
+                        pdLink.href = data.link;
+                        pdLink.style.display = data.link !== '#' ? 'inline-block' : 'none';
+                        
+                        pdImages.innerHTML = '';
+                        data.images.forEach(imgSrc => {
+                            const img = document.createElement('img');
+                            img.src = imgSrc;
+                            pdImages.appendChild(img);
+                        });
+
+                        gsap.fromTo("#project-details-panel > *", 
+                            { opacity: 0, x: -20 }, 
+                            { opacity: 1, x: 0, duration: 0.5, stagger: 0.1 }
+                        );
+                    }
+                });
+            });
+
+            // Trigger the first one
+            const firstActive = document.querySelector('.wheel-node.active') || nodes[0];
+            if (firstActive) firstActive.click();
+        }, 100);
     }
     /* ---------------------------------- */
 

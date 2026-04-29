@@ -166,12 +166,12 @@ h1, h2, h3 {
 }
 
 #hand-left {
-    left: -2vw; /* Slight overlap to ensure it's pinned to the edge */
+    left: 0;
     transform: translateX(-100%) translateY(-50%);
 }
 
 #hand-right {
-    right: -2vw; /* Slight overlap to ensure it's pinned to the edge */
+    right: 0;
     transform: translateX(100%) translateY(-50%);
 }
 
@@ -214,8 +214,8 @@ h1, h2, h3 {
 }
 
 .sidebar-crest {
-    width: 65px;
-    height: 65px;
+    width: 75px; 
+    height: 75px;
     margin-bottom: 20px;
     transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 50%;
@@ -224,18 +224,15 @@ h1, h2, h3 {
     display: flex;
     justify-content: center;
     align-items: center;
-    -webkit-mask-image: radial-gradient(circle, black 65%, transparent 70%);
-    mask-image: radial-gradient(circle, black 65%, transparent 70%);
     box-shadow: inset 0 0 20px rgba(0,0,0,0.9); /* Inner shadow for depth */
-    opacity: 0.85;
+    opacity: 1;
 }
 
 .sidebar-crest img {
-    width: 110%;
-    height: 110%;
-    object-fit: cover;
-    mix-blend-mode: screen; 
-    filter: sepia(0.5) brightness(0.7) contrast(1.3) saturate(0.9); /* Aged, antique gold look */
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.5)); /* Add a subtle gold glow instead of hiding it */
     border-radius: 50%;
     animation: rotate-slow 15s linear infinite; /* Added slow spinning */
 }
@@ -324,7 +321,7 @@ h1, h2, h3 {
 }
 
 .nav-icons li .icon {
-    font-size: 2.2rem; /* Increased for prominence */
+    font-size: 1.8rem; /* Adjusted size for better balance */
     margin-bottom: 8px;
     color: var(--gold);
     text-shadow: 0 0 10px rgba(0,0,0,0.8), 0 0 5px var(--gold-glow);
@@ -474,7 +471,7 @@ h1, h2, h3 {
     align-items: center;
     justify-content: center;
     padding: 20px 0;
-    overflow: visible;
+    overflow: hidden;
 }
 
 #projects-section .section-content {
@@ -500,7 +497,7 @@ h1, h2, h3 {
     max-height: 90vh; /* Scaled up significantly */
     margin: 0 auto;
     background: transparent;
-    overflow: visible;
+    overflow: hidden;
     box-shadow: 0 0 50px rgba(0,0,0,0.5);
 }
 
@@ -976,79 +973,157 @@ h1, h2, h3 {
     box-shadow: 0 0 20px var(--gold-glow);
 }
 
-/* Map Overlay */
-.map-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
+/* Shield Wheel UI */
+.projects-container {
+    position: relative;
     width: 100%;
-    height: 100%;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
     z-index: 10;
-    pointer-events: none;
 }
 
-.project-point {
-    position: absolute;
+.project-details {
+    width: 50%;
+    height: 100%;
+    padding: 100px 50px 100px 150px; /* Increased left padding to clear 100px sidebar */
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: flex-end;
-    z-index: 101;
-    pointer-events: auto;
-    transform: none; /* Flatten */
-    cursor: pointer;
-    opacity: 1 !important;
-    visibility: visible !important;
+    justify-content: center;
+    color: var(--text-light);
+    z-index: 20;
+    position: relative;
 }
 
-.project-fort {
+.project-details h2 {
+    font-size: 3rem;
+    color: var(--gold);
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+.project-details p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    color: #ccc;
+    max-width: 80%;
+}
+
+.pd-images {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+}
+
+.pd-images img {
+    height: 150px;
+    border-radius: 6px;
+    border: 2px solid var(--gold);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.8);
+    transition: transform 0.3s;
+}
+.pd-images img:hover {
+    transform: scale(1.05);
+}
+
+.shield-wheel-wrapper {
     position: absolute;
-    bottom: 50px; /* Adjusted for larger size */
-    left: 50%;
-    transform: translateX(-50%) translateY(0);
-    width: 150px; /* Majestic scale */
-    height: auto;
-    filter: drop-shadow(0 20px 30px rgba(0,0,0,0.6)) sepia(0.2);
-    opacity: 1;
-    pointer-events: none;
-    z-index: 10;
+    right: 0;
+    top: 0;
+    width: 50vw;
+    height: 100vh;
+    z-index: 15;
 }
 
-.marker-dot {
+/* The big circle acting as a shield on the right edge */
+.shield-base {
+    position: absolute;
+    right: -45vh; /* Half of 90vh */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 90vh; /* Based on viewport height to never get cut off vertically */
+    height: 90vh; /* Circular */
+    border-radius: 50%;
+    background: #000000;
+    border: 5px solid var(--gold);
+    box-shadow: inset 0 0 50px rgba(0,0,0,0.9), 0 0 30px var(--gold-glow);
+}
+
+/* The wheel container that rotates */
+.wheel {
+    position: absolute;
+    right: -45vh; /* Center of rotation is center of shield */
+    top: 50%;
+    width: 90vh;
+    height: 90vh;
+    transform: translateY(-50%) rotate(0deg);
+    transform-origin: center center;
+    will-change: transform;
+}
+
+.shield-crest {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 25px;
-    height: 25px;
-    background: var(--gold);
-    border-radius: 50%;
     transform: translate(-50%, -50%);
-    box-shadow: 0 0 20px var(--gold-glow), 0 0 40px var(--gold-glow);
-    z-index: 101;
-    animation: marker-pulse 2s infinite ease-in-out;
-}
-
-@keyframes marker-pulse {
-    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-    50% { transform: translate(-50%, -50%) scale(1.5); opacity: 0.8; }
-}
-
-.horse-traveler {
-    position: absolute;
-    width: 280px; /* Slightly larger for presence */
+    width: 95%; /* Increased from 70% to make the crest much larger */
     height: auto;
-    z-index: 100000;
-    transform: translateX(-50%) translateY(-50%);
+    opacity: 0.8;
     pointer-events: none;
-    filter: drop-shadow(0 20px 30px rgba(0,0,0,0.8));
-    visibility: visible !important;
-    opacity: 1 !important;
+    filter: drop-shadow(0 0 20px var(--gold-glow));
 }
 
-.horse-traveler img {
-    width: 100%;
-    height: auto;
+.wheel-node {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -40px;
+    margin-top: -40px;
+    /* Transform set via JS for layout, then animated */
+    width: 80px;
+    height: 80px;
+    background: #111;
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 15px rgba(0,0,0,0.9);
+    cursor: pointer;
+    transition: box-shadow 0.3s, border-color 0.3s;
+}
+
+.wheel-node.active {
+    border-color: #fff;
+    box-shadow: 0 0 25px var(--gold-glow);
+}
+
+.node-icon {
+    font-size: 2rem;
+    color: var(--gold);
+}
+
+.node-icon i {
+    transform: rotate(0deg); /* JS will counter-rotate this so icons stay upright */
     display: block;
+}
+
+.node-label {
+    position: absolute;
+    left: -120px;
+    width: 100px;
+    text-align: right;
+    color: #fff;
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    text-shadow: 0 0 5px rgba(0,0,0,0.8);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.wheel-node.active .node-label {
+    opacity: 1;
 }
 
 .project-point:hover .project-fort {

@@ -7,7 +7,7 @@
     <title>My Portfolio</title>
     <meta name="description"
         content="Experience the epic legend of Magadheera. Revisit the 400-year-old promise of Kala Bhairava and Princess Mithravinda.">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=12">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,13 +25,13 @@
     <!-- Sidebar Navigation -->
     <nav id="sidebar">
         <div class="sidebar-crest">
-            <img src="assets/images/royal_crest.png" alt="Royal Crest">
+            <img src="assets/images/royal_crest.png?v=2" alt="Royal Crest">
             <div class="slash-effect"></div>
         </div>
         <div class="vintage-divider"></div>
         <ul class="nav-icons">
             <li class="active" data-section="portal-section">
-                <span class="icon"><i class="fas fa-house"></i></span>
+                <span class="icon"><i class="fas fa-archway"></i></span>
                 <span class="label">HOME</span>
             </li>
             <div class="vintage-divider small"></div>
@@ -46,12 +46,12 @@
             </li>
             <div class="vintage-divider small"></div>
             <li data-section="projects-section">
-                <span class="icon"><i class="fas fa-shield-halved"></i></span>
+                <span class="icon"><i class="fas fa-shield-alt"></i></span>
                 <span class="label">PROJECTS</span>
             </li>
             <div class="vintage-divider small"></div>
             <li data-section="contact-section">
-                <span class="icon"><i class="fas fa-paper-plane"></i></span>
+                <span class="icon"><i class="fas fa-envelope-open-text"></i></span>
                 <span class="label">CONTACT</span>
             </li>
         </ul>
@@ -205,26 +205,41 @@
         <div class="section-content">
             <h3 class="section-tag">MY PROJECTS</h3>
         </div>
-        <div class="section-bg">
-            <img src="assets/images/project_map.jpg" alt="Projects Map">
-            <div class="map-overlay">
-                <!-- Journey Point 1: FURRR -->
-                <a href="https://github.com/gayathrii3/furrr_petcare_app" target="_blank" class="project-point" style="top: 38%; left: 18%;">
-                    <div class="label">FURRR<br><span>Petcare AI application</span></div>
-                </a>
-                <!-- Journey Point 2: Vendor app -->
-                <a href="https://github.com/gayathrii3/Venue_booking-Android-App" target="_blank" class="project-point" style="top: 62%; left: 70%;">
-                    <div class="label">Vendor app<br><span>Venue booking application</span></div>
-                </a>
+        <div class="projects-container">
+            <!-- Left Side Details -->
+            <div class="project-details" id="project-details-panel">
+                <h2 id="pd-title">Select a Project</h2>
+                <p id="pd-desc">Scroll or click a node to view project details.</p>
+                <div id="pd-images" class="pd-images"></div>
+                <a id="pd-link" href="#" target="_blank" style="display: none;" class="btn-ancient">View on GitHub</a>
+            </div>
 
-                <svg class="map-line" viewBox="0 0 1000 600" preserveAspectRatio="none">
-                    <path class="journey-path" d="M 180 228 C 400 228 500 372 700 372" stroke="var(--gold)"
-                        fill="transparent" stroke-dasharray="12,12" stroke-width="5" />
-                </svg>
-
-                <!-- The Majestic Horse Traveler -->
-                <div class="horse-traveler" style="top: 10%; left: 30%;">
-                    <img src="assets/images/horse.png" alt="Majestic Horse">
+            <!-- Right Side Shield Wheel -->
+            <div class="shield-wheel-wrapper">
+                <div class="shield-base"></div>
+                <div class="wheel" id="projects-wheel">
+                    <!-- Rotating Crest Background -->
+                    <img src="assets/images/royal_crest.png" class="shield-crest" alt="Rotating Crest">
+                    
+                    <!-- Project Nodes -->
+                    <div class="wheel-node active" data-project="vendor">
+                        <div class="node-icon"><i class="fas fa-store"></i></div>
+                        <div class="node-label">Vendor App</div>
+                    </div>
+                    <div class="wheel-node" data-project="furrr">
+                        <div class="node-icon"><i class="fas fa-paw"></i></div>
+                        <div class="node-label">FURRR</div>
+                    </div>
+                    <!-- Placeholders to make it a full wheel -->
+                    <div class="wheel-node placeholder">
+                        <div class="node-icon"><i class="fas fa-lock"></i></div>
+                    </div>
+                    <div class="wheel-node placeholder">
+                        <div class="node-icon"><i class="fas fa-lock"></i></div>
+                    </div>
+                    <div class="wheel-node placeholder">
+                        <div class="node-icon"><i class="fas fa-lock"></i></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -232,36 +247,38 @@
 
     <!-- Section 6: Contact Temple -->
     <section id="contact-section" class="scroll-reveal-section">
-        <!-- The Cinematic Hands -->
-        <div id="hands-container">
-            <img src="assets/images/left hand.png" id="hand-left" class="hand" alt="Left Hand">
-            <img src="assets/images/right hand.png" id="hand-right" class="hand" alt="Right Hand">
-        </div>
         <div class="section-content">
             <h2 class="section-title">LET'S Connect</h2>
             <div class="ancient-connector-bar">
                 <div class="frame-corners"></div>
                 <div class="center-spike-top"></div>
                 <div class="center-spike-bottom"></div>
-                <a href="https://github.com/gayathrii3" target="_blank" class="connector-item">
+                <a href="https://github.com/gayathrii3" class="connector-item" target="_blank">
                     <i class="fab fa-github"></i>
                     <span>GITHUB</span>
                 </a>
                 <div class="connector-divider"></div>
-                <a href="#" class="connector-item">
+                <a href="https://linkedin.com/in/gayathrii3" class="connector-item" target="_blank">
                     <i class="fab fa-linkedin-in"></i>
                     <span>LINKEDIN</span>
                 </a>
                 <div class="connector-divider"></div>
-                <a href="mailto:gayathrilakshmi344@gmail.com" class="connector-item">
+                <a href="mailto:gayathrii3@example.com" class="connector-item">
                     <i class="far fa-envelope"></i>
                     <span>EMAIL ME</span>
                 </a>
             </div>
         </div>
+
+        <!-- The Cinematic Hands -->
+        <div id="hands-container">
+            <img src="assets/images/left hand.png" id="hand-left" class="hand" alt="Left Hand">
+            <img src="assets/images/right hand.png" id="hand-right" class="hand" alt="Right Hand">
+        </div>
     </section>
 
-    <!-- Section 7: The Kingdom (Grand Finale) -->
+
+    <!-- Section 2: The Kingdom & Union (Grand Finale) -->
     <div id="kingdom-section">
         <!-- Fort Background -->
         <div id="entrance-fort">
@@ -273,9 +290,11 @@
         <div id="title-container">
             <img src="assets/images/title.png" id="main-title" alt="Magadheera Title">
         </div>
+
+
     </div>
 
-    <script src="js/script.js"></script>
+    <script src="js/script.js?v=5"></script>
 </body>
 
 </html>
