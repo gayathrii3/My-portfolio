@@ -2,21 +2,28 @@
 gsap.registerPlugin(ScrollTrigger);
 
 document.addEventListener('DOMContentLoaded', () => {
+    // 0. Update Date
+    const dateElement = document.getElementById('home-date');
+    if (dateElement) {
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        dateElement.textContent = new Date().toLocaleDateString(undefined, options);
+    }
+
     // 1. Initial State Setup
-    gsap.set("#portal-hero", { 
-        scale: 1, 
-        y: "25vh", // Grounded on the floor of the cave
+    gsap.set("#portal-hero", {
+        scale: 1,
+        y: "25vh", // Grounded perfectly on the hole ledge
         opacity: 1,
         left: "50%"
-    }); 
-    gsap.set("#hand-left", { xPercent: -100, yPercent: -50, opacity: 0 }); 
-    gsap.set("#hand-right", { xPercent: 100, yPercent: -50, opacity: 0 }); 
-    gsap.set("#title-container", { opacity: 0, y: -20 }); 
-    gsap.set("#portal-world", { 
+    });
+    gsap.set("#hand-left", { xPercent: -100, yPercent: -50, opacity: 0 });
+    gsap.set("#hand-right", { xPercent: 100, yPercent: -50, opacity: 0 });
+    gsap.set("#title-container", { opacity: 0, y: -20 });
+    gsap.set("#portal-world", {
         scale: 1.2, // Increased scale to prevent edges showing during parallax
         y: "-5vh",  // Moved up slightly as requested
-        opacity: 1 
-    }); 
+        opacity: 1
+    });
     gsap.set("#portal-frame", { scale: 1.1, opacity: 1 });
 
     // --- PORTAL ENTRANCE ANIMATION (Removed Zoom and Fade) ---
@@ -42,14 +49,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     heroFlowTimeline
-        .to("#portal-hero", { 
+        .to("#portal-hero", {
             zIndex: 500, // Leap out to the foreground
             duration: 0.1
         })
-        .to("#portal-hero", { 
-            x: "41vw", 
-            y: "-5vh", // Original "standing" coordinates
-            scale: 0.85, 
+        .to("#portal-hero", {
+            x: "41vw", // Pushed a little further right
+            y: "0vh", // Adjusted lower so the figure's head doesn't get cut off
+            scale: 0.85,
             duration: 2,
             ease: "power2.inOut"
         });
@@ -63,27 +70,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- THE STICKING & FADE OUT ---
-    // Hero stays on the rock as it moves up, then fades away
-    const heroStickTimeline = gsap.timeline({
-        scrollTrigger: {
-            trigger: "#about-section",
-            start: "top 0%",
-            end: "bottom 0%",
-            scrub: true
-        }
-    });
-
-    heroStickTimeline
-        .to("#portal-hero", { 
-            y: "-105vh", // Move up precisely from the -5vh base to stay relative to rock
-            ease: "none"
-        }, 0)
-        .to("#portal-hero", { 
-            opacity: 0, // Fade out as it leaves
-            duration: 0.5
-        }, 0.5); // Start fading halfway through leaving
-
     // Reveal for the Cliff Rock
     gsap.from("#target-rock", {
         x: 100,
@@ -91,9 +77,30 @@ document.addEventListener('DOMContentLoaded', () => {
         duration: 1.5,
         scrollTrigger: {
             trigger: "#about-section",
-            start: "top 60%",
+            start: "top 70%",
+            toggleActions: "play none none none" // Prevent it from sliding away when scrolling back up
         }
     });
+
+    // Make the fixed hero scroll away natively with the about section and disappear
+    gsap.fromTo("#portal-hero", 
+        { y: "25vh", scale: 1, opacity: 1 }, 
+        {
+            y: () => {
+                // Move up exactly by the height of the about section so it stays glued to the rock
+                return -document.querySelector("#about-section").offsetHeight;
+            },
+            opacity: 0, // Fade out as it leaves the screen
+            ease: "none",
+            scrollTrigger: {
+                trigger: "#about-section",
+                start: "top top", // When about section is at top of screen
+                end: "bottom top", // When about section scrolls completely out
+                scrub: true,
+                invalidateOnRefresh: true // Recalculate on resize
+            }
+        }
+    );
 
     // --- THE FINAL LANDING ---
     // The hero stays on the rock as the ultimate monument of your journey.
@@ -105,46 +112,46 @@ document.addEventListener('DOMContentLoaded', () => {
     const contactTimeline = gsap.timeline({
         scrollTrigger: {
             trigger: "#contact-section",
-            start: "top 80%", 
+            start: "top 80%",
             end: "bottom center",
-            scrub: 2 
+            scrub: 2
         }
     });
-    
+
     contactTimeline
-        .to("#hand-left", { x: "20vw", xPercent: -50, opacity: 1, duration: 4 }, 0) 
-        .to("#hand-right", { x: "-20vw", xPercent: 50, opacity: 1, duration: 4 }, 0); 
+        .to("#hand-left", { x: "20vw", xPercent: -50, opacity: 1, duration: 4 }, 0)
+        .to("#hand-right", { x: "-20vw", xPercent: 50, opacity: 1, duration: 4 }, 0);
     // 5. Kingdom Section: Title Reveal
     const kingdomTimeline = gsap.timeline({
         scrollTrigger: {
             trigger: "#kingdom-section",
-            start: "top 80%", 
+            start: "top 80%",
             end: "bottom center",
-            scrub: 1 
+            scrub: 1
         }
     });
-    
+
     kingdomTimeline.to("#title-container", { opacity: 1, y: 0, duration: 2 });
 
     // Subtle Mouse Parallax for the 'Hole' (World and Frame)
     document.addEventListener('mousemove', (e) => {
-        if (window.scrollY < window.innerHeight * 1.5) { 
+        if (window.scrollY < window.innerHeight * 1.5) {
             const { clientX, clientY } = e;
             const xPos = (clientX / window.innerWidth - 0.5);
             const yPos = (clientY / window.innerHeight - 0.5);
- 
+
             // Move the world slightly opposite to create depth
-            gsap.to("#portal-world", { 
-                x: xPos * -40, 
-                y: yPos * -30, 
+            gsap.to("#portal-world", {
+                x: xPos * -40,
+                y: yPos * -30,
                 duration: 1.5,
                 ease: "power2.out"
             });
 
             // Move the frame even more subtly
-            gsap.to("#portal-frame", { 
-                x: xPos * 20, 
-                y: yPos * 15, 
+            gsap.to("#portal-frame", {
+                x: xPos * 20,
+                y: yPos * 15,
                 duration: 2,
                 ease: "power2.out"
             });
@@ -161,19 +168,19 @@ document.addEventListener('DOMContentLoaded', () => {
         item.addEventListener('click', () => {
             const sectionId = item.getAttribute('data-section');
             const target = document.getElementById(sectionId);
-            
+
             if (target) {
                 // Remove active class from all
                 navItems.forEach(i => i.classList.remove('active'));
                 // Add to clicked
                 item.classList.add('active');
-                
+
                 // Account for GSAP pin-spacer
                 let targetTop = target.offsetTop;
                 if (target.parentElement && target.parentElement.classList.contains('pin-spacer')) {
                     targetTop = target.parentElement.offsetTop;
                 }
-                
+
                 // Scroll to section
                 window.scrollTo({
                     top: targetTop,
@@ -187,13 +194,13 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('scroll', () => {
         const scrollPos = window.scrollY + 200;
         const sections = ['portal-section', 'about-section', 'skills-section', 'projects-section', 'contact-section', 'kingdom-section'];
-        
+
         sections.forEach(id => {
             const el = document.getElementById(id);
             if (el) {
                 let elTop = el.offsetTop;
                 let elHeight = el.offsetHeight;
-                
+
                 if (el.parentElement && el.parentElement.classList.contains('pin-spacer')) {
                     elTop = el.parentElement.offsetTop;
                     elHeight = el.parentElement.offsetHeight;
@@ -283,28 +290,55 @@ document.addEventListener('DOMContentLoaded', () => {
     const wheel = document.getElementById('projects-wheel');
     const nodes = document.querySelectorAll('.wheel-node');
     const pdTitle = document.getElementById('pd-title');
-    const pdDesc = document.getElementById('pd-desc');
+    const pdGithubLink = document.getElementById('pd-github-link');
+    const pdTechStack = document.getElementById('pd-tech-stack');
+    const pdBullets = document.getElementById('pd-bullets');
+    const pdDivider = document.querySelector('.pd-divider');
     const pdImages = document.getElementById('pd-images');
-    const pdLink = document.getElementById('pd-link');
 
     const projectData = {
         vendor: {
-            title: "Vendor App",
+            title: "Venue Booking App",
+            liveStatus: "",
             desc: "Venue Booking App lets users browse, view, and book venues for events easily. I worked on user-side development focusing on API integration and functionality. Implemented features for venue browsing, booking, and smooth navigation. Handled API responses and displayed data effectively in the UI. Used Swagger for API testing and Figma for basic wireframe design. Built using Flutter, REST APIs, and Android UI with Git for version control.",
+            techStack: ["Flutter", "Dart", "SQL", "Swagger", "Figma"],
+            bullets: [
+                "Designed and developed a cross-platform venue booking application using Flutter and Dart.",
+                "Implemented user authentication (login/signup), profile management, booking calendar, and booking history features.",
+                "Managed backend data using SQL for user records and booking management.",
+                "Designed intuitive UI/UX wireframes and prototypes using Figma."
+            ],
             images: [],
             link: "#"
         },
         furrr: {
-            title: "FURRR",
+            title: "FURRR - AI petcare app",
+            liveStatus: "LIVE PROJECT",
             desc: "Furrr is a Flutter-based pet care app offering real-time AI insights for pet health and behavior. It includes features like a smart symptom checker, behavior analyzer, and interactive bark/play system. The app provides text-to-speech support for accessible AI results. It features premium UI with animations, mascots, and a soft themed design. Users can find nearby vets, access Indian pet food safety guides, and view a YouTube-based pet feed. Built with Flutter, Gemini AI, Google APIs, and advanced animation tools for a seamless experience.",
-            images: [
-                "assets/images/furrr-1.jpg",
-                "assets/images/furrr-2.jpg",
-                "assets/images/furrr-3.jpg",
-                "assets/images/furrr-4.jpg",
-                "assets/images/furrr-5.jpg"
+            techStack: ["Flutter (Dart)", "Python", "FastAPI", "Gemini AI"],
+            bullets: [
+                "Built a cross-platform mobile app for Indian dog owners with AI-powered health tools, breed-specific risk analysis for 9 breeds, and hyperlocal community features.",
+                "Integrated Google Gemini 2.0 Flash API for real-time wound analysis and symptom checking from uploaded photos.",
+                "Designed a Breed Health Risk Engine covering 9 breeds including Indian Indie dogs with age-filtered genetic risk predictions and prevention guidance.",
+                "Implemented vernacular language support in 4 languages (English, Hindi, Telugu, Tamil).",
+                "Designed interactive UI with animations, TTS (Text-to-Speech), and engaging pet activity features."
             ],
+            images: [],
             link: "https://github.com/gayathrii3/furrr_petcare_app.git"
+        },
+        safeorbit: {
+            title: "SafeOrbit – Women's Safety",
+            liveStatus: "PROTOTYPE",
+            desc: "SafeOrbit is a Women's Night Safety System using real-time location-based safety heatmaps. It utilizes NLP to analyze public reviews and identify risk indicators.",
+            techStack: ["Python", "Flask", "SQLite", "NLP", "Heatmaps"],
+            bullets: [
+                "Built a real-time location-based safety heatmap system using public reviews + AI to classify safe vs unsafe zones.",
+                "Developed an NLP sentiment classifier (Python) to analyze textual reviews and detect risk indicators such as harassment, poorly lit areas, or crowd levels.",
+                "Designed color-coded safety heatmaps to help users navigate risky routes at night, integrating SOS alert routing and GPS tracking.",
+                "Analyzed 30+ public reviews, classified safety zones with NLP, improving risk identification accuracy and generating data-driven insights."
+            ],
+            images: [],
+            link: "#"
         }
     };
 
@@ -314,22 +348,22 @@ document.addEventListener('DOMContentLoaded', () => {
             const radius = wheel.offsetWidth / 2;
             const totalNodes = nodes.length;
             const angleStep = 360 / totalNodes;
-            
+
             // Position nodes
             nodes.forEach((node, i) => {
                 const angleDeg = i * angleStep;
                 const angleRad = angleDeg * (Math.PI / 180);
-                
+
                 // Start from the left side (-x direction)
-                const x = Math.cos(angleRad + Math.PI) * radius; 
+                const x = Math.cos(angleRad + Math.PI) * radius;
                 const y = Math.sin(angleRad + Math.PI) * radius;
-                
+
                 gsap.set(node, { x: x, y: y });
             });
 
             // ScrollTrigger for the wheel pinning and rotating
             gsap.to(wheel, {
-                rotation: 360, 
+                rotation: 360,
                 ease: "none",
                 scrollTrigger: {
                     trigger: projectsSection,
@@ -357,10 +391,27 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (key && projectData[key]) {
                         const data = projectData[key];
                         pdTitle.textContent = data.title;
-                        pdDesc.textContent = data.desc;
-                        pdLink.href = data.link;
-                        pdLink.style.display = data.link !== '#' ? 'inline-block' : 'none';
                         
+                        pdGithubLink.href = data.link || '#';
+                        pdGithubLink.style.display = 'inline-flex';
+
+                        if (pdDivider) pdDivider.style.display = 'block';
+
+                        pdTechStack.innerHTML = '';
+                        data.techStack.forEach(tech => {
+                            const span = document.createElement('span');
+                            span.className = 'tech-pill';
+                            span.textContent = tech;
+                            pdTechStack.appendChild(span);
+                        });
+
+                        pdBullets.innerHTML = '';
+                        data.bullets.forEach(bullet => {
+                            const li = document.createElement('li');
+                            li.textContent = bullet;
+                            pdBullets.appendChild(li);
+                        });
+
                         pdImages.innerHTML = '';
                         data.images.forEach(imgSrc => {
                             const img = document.createElement('img');
@@ -368,8 +419,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             pdImages.appendChild(img);
                         });
 
-                        gsap.fromTo("#project-details-panel > *", 
-                            { opacity: 0, x: -20 }, 
+                        gsap.fromTo("#project-details-panel > *",
+                            { opacity: 0, x: -20 },
                             { opacity: 1, x: 0, duration: 0.5, stagger: 0.1 }
                         );
                     }
@@ -395,56 +446,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 8. Skills Slider: Auto-Scroll + Manual Controls
-    const slider = document.getElementById('skills-slider');
-    const prevBtn = document.getElementById('skill-prev');
-    const nextBtn = document.getElementById('skill-next');
-    let currentX = 0;
-    const step = 400;
-
-    if (slider && prevBtn && nextBtn) {
-        // Create an infinite auto-scrolling timeline
-        let autoScroll = gsap.to(slider, {
-            x: () => -(slider.scrollWidth - slider.parentElement.offsetWidth + 100),
-            duration: 25,
-            repeat: -1,
-            yoyo: true,
-            ease: "none",
-            paused: false
-        });
-
-        // Function to handle manual navigation
-        const moveManual = (direction) => {
-            autoScroll.kill(); // Stop auto-scroll permanently when user interacts manually
-            
-            const containerWidth = slider.parentElement.offsetWidth;
-            const contentWidth = slider.scrollWidth;
-            const maxScroll = contentWidth - containerWidth + 100;
-
-            if (direction === 'next') {
-                currentX -= step;
-            } else {
-                currentX += step;
-            }
-
-            if (currentX < -maxScroll) currentX = -maxScroll;
-            if (currentX > 0) currentX = 0;
-
-            gsap.to(slider, {
-                x: currentX,
-                duration: 0.8,
-                ease: "power2.out"
-            });
-        };
-
-        nextBtn.addEventListener('click', () => moveManual('next'));
-        prevBtn.addEventListener('click', () => moveManual('prev'));
-
-        // Pause on hover
-        slider.parentElement.addEventListener('mouseenter', () => {
-            if (autoScroll && autoScroll.isActive()) autoScroll.pause();
-        });
-        slider.parentElement.addEventListener('mouseleave', () => {
-            if (autoScroll && !autoScroll.isActive() && autoScroll.vars) autoScroll.resume();
-        });
-    }
+    // Note: The scrolling soldiers and slider have been removed to give a more professional look.
 });

@@ -4,9 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Portfolio</title>
+    <title>Gayathri's portfolio</title>
     <meta name="description"
         content="Experience the epic legend of Magadheera. Revisit the 400-year-old promise of Kala Bhairava and Princess Mithravinda.">
+    <link rel="icon" type="image/png" href="assets/images/royal_crest.png">
     <link rel="stylesheet" href="css/style.css?v=12">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -59,6 +60,11 @@
 
     <!-- Section 1: The Portal Entrance -->
     <div id="portal-section">
+        <!-- Portfolio and Date Display -->
+        <div class="home-info-display">
+            <span class="home-title">PORTFOLIO</span>
+            <span id="home-date" class="home-date"></span>
+        </div>
         <div id="portal-sticky-wrapper">
             <!-- The Portal World (inside the hole) -->
             <div id="portal-world">
@@ -76,15 +82,36 @@
 
 
     <!-- Section 3: About Story -->
-    <section id="about-section" class="scroll-reveal-section">
-        <div class="section-content">
-            <h2 class="section-title">ABOUT ME</h2>
-            <h4 class="about-signature">I'M GAYATHRI</h4>
-            <p class="section-desc">I am a Computer Science and Engineering student with hands-on experience in Python,
-                SQL, and Excel, along with strong skills in cross-platform mobile application development using Flutter
-                and Dart. I am proficient in REST API integration and testing with Swagger, and experienced in designing
-                intuitive user interfaces using Figma.</p>
+    <section id="about-section" class="scroll-reveal-section about-theme-layout">
+        <div class="about-theme-box">
+            <h2 class="theme-greeting">About Me</h2>
+
+            <p class="theme-desc">
+                I am a <span class="theme-highlight">Computer Science and Engineering student</span> with hands-on
+                experience in <br><span class="theme-highlight">Python, SQL, and Excel</span>, along with strong skills
+                in
+                cross-platform mobile application development using <span class="theme-highlight">Flutter and
+                    Dart</span>. I am proficient in REST API integration and testing with Swagger, and experienced in
+                designing intuitive user interfaces using Figma.
+            </p>
+
+
+
+            <div class="about-action-buttons">
+                <a href="#" class="btn-ancient action-btn">
+                    <i class="fas fa-download"></i> DOWNLOAD_RESUME
+                </a>
+                <a href="#contact-section" class="btn-ancient action-btn">
+                    <i class="fas fa-envelope"></i> CONTACT
+                </a>
+            </div>
+
+            <div class="about-socials">
+                <a href="https://github.com/gayathrii3" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="#" class="linkedin-icon"><i class="fab fa-linkedin-in"></i></a>
+            </div>
         </div>
+
         <!-- Cinematic Rock Element -->
         <div class="cliff-rock-container">
             <img src="assets/images/cliff_rock.png" id="target-rock" class="cliff-rock" alt="Cinematic Rock">
@@ -94,109 +121,75 @@
     <!-- Section 4: Skills Arsenal -->
     <section id="skills-section" class="scroll-reveal-section">
         <div class="section-content">
-            <h3 class="section-tag">MY SKILLS</h3>
+            <div class="skills-outer-box">
+                <img src="assets/images/left_figure.png" class="skills-side-figure left-figure" alt="Warrior Left">
+                <img src="assets/images/right_figure.png" class="skills-side-figure right-figure" alt="Warrior Right">
+                <h3 class="section-tag skills-header-tag">MY SKILLS</h3>
 
-            <div class="skills-wrapper">
-                <button class="skill-nav-btn prev" id="skill-prev"><i class="fas fa-chevron-left"></i></button>
-                <button class="skill-nav-btn next" id="skill-next"><i class="fas fa-chevron-right"></i></button>
-                <div class="skills-grid-new slider" id="skills-slider">
-                    <!-- Warrior 1: Python -->
-                    <div class="warrior-skill-item">
-                        <div class="warrior-figure-container">
-                            <img src="assets/images/left_figure.png" class="warrior-figure" alt="Python Warrior">
-                            <div class="warrior-glow"></div>
-                        </div>
-                        <p class="skill-name">PYTHON</p>
-                        <div class="skill-progress-container">
-                            <div class="skill-progress-bar" style="width: 90%;"></div>
+                <!-- New Skills Category Grid (Moved UP) -->
+                <div class="skills-theme-grid">
+                    <!-- Languages -->
+                    <div class="skill-category-box">
+                        <h4>Languages</h4>
+                        <div class="skill-pills">
+                            <span class="skill-pill">Python</span>
+                            <span class="skill-pill">C</span>
                         </div>
                     </div>
 
-                    <!-- Warrior 2: SQL -->
-                    <div class="warrior-skill-item">
-                        <div class="warrior-figure-container">
-                            <img src="assets/images/left_figure.png" class="warrior-figure" alt="SQL Warrior">
-                            <div class="warrior-glow"></div>
-                        </div>
-                        <p class="skill-name">SQL</p>
-                        <div class="skill-progress-container">
-                            <div class="skill-progress-bar" style="width: 85%;"></div>
-                        </div>
-                    </div>
-
-                    <!-- Warrior 3: Excel -->
-                    <div class="warrior-skill-item">
-                        <div class="warrior-figure-container">
-                            <img src="assets/images/left_figure.png" class="warrior-figure" alt="Excel Warrior">
-                            <div class="warrior-glow"></div>
-                        </div>
-                        <p class="skill-name">EXCEL</p>
-                        <div class="skill-progress-container">
-                            <div class="skill-progress-bar" style="width: 80%;"></div>
+                    <!-- Frontend -->
+                    <div class="skill-category-box">
+                        <h4>Frontend</h4>
+                        <div class="skill-pills">
+                            <span class="skill-pill">HTML5</span>
+                            <span class="skill-pill">CSS3</span>
+                            <span class="skill-pill">Tailwind CSS</span>
+                            <span class="skill-pill">Vite</span>
+                            <span class="skill-pill">Responsive Design</span>
                         </div>
                     </div>
 
-                    <!-- Warrior 4: Figma -->
-                    <div class="warrior-skill-item">
-                        <div class="warrior-figure-container">
-                            <img src="assets/images/left_figure.png" class="warrior-figure" alt="Figma Warrior">
-                            <div class="warrior-glow"></div>
-                        </div>
-                        <p class="skill-name">FIGMA</p>
-                        <div class="skill-progress-container">
-                            <div class="skill-progress-bar" style="width: 85%;"></div>
+                    <!-- Backend -->
+                    <div class="skill-category-box">
+                        <h4>Backend</h4>
+                        <div class="skill-pills">
+                            <span class="skill-pill">REST APIs</span>
+                            <span class="skill-pill">JWT Auth</span>
                         </div>
                     </div>
 
-                    <!-- Warrior 5: Flutter -->
-                    <div class="warrior-skill-item">
-                        <div class="warrior-figure-container">
-                            <img src="assets/images/right_figure.png" class="warrior-figure" alt="Flutter Warrior">
-                            <div class="warrior-glow"></div>
-                        </div>
-                        <p class="skill-name">FLUTTER</p>
-                        <div class="skill-progress-container">
-                            <div class="skill-progress-bar" style="width: 90%;"></div>
+                    <!-- Databases -->
+                    <div class="skill-category-box">
+                        <h4>Databases</h4>
+                        <div class="skill-pills">
+                            <span class="skill-pill">SQL</span>
                         </div>
                     </div>
 
-                    <!-- Warrior 6: Dart -->
-                    <div class="warrior-skill-item">
-                        <div class="warrior-figure-container">
-                            <img src="assets/images/right_figure.png" class="warrior-figure" alt="Dart Warrior">
-                            <div class="warrior-glow"></div>
-                        </div>
-                        <p class="skill-name">DART</p>
-                        <div class="skill-progress-container">
-                            <div class="skill-progress-bar" style="width: 85%;"></div>
-                        </div>
-                    </div>
-
-                    <!-- Warrior 7: REST API -->
-                    <div class="warrior-skill-item">
-                        <div class="warrior-figure-container">
-                            <img src="assets/images/right_figure.png" class="warrior-figure" alt="API Warrior">
-                            <div class="warrior-glow"></div>
-                        </div>
-                        <p class="skill-name">REST API</p>
-                        <div class="skill-progress-container">
-                            <div class="skill-progress-bar" style="width: 80%;"></div>
+                    <!-- Core CS -->
+                    <div class="skill-category-box">
+                        <h4>Core CS</h4>
+                        <div class="skill-pills">
+                            <span class="skill-pill">DSA</span>
+                            <span class="skill-pill">OOP</span>
+                            <span class="skill-pill">OS</span>
+                            <span class="skill-pill">Computer Networks</span>
                         </div>
                     </div>
 
-                    <!-- Warrior 8: Swagger -->
-                    <div class="warrior-skill-item">
-                        <div class="warrior-figure-container">
-                            <img src="assets/images/right_figure.png" class="warrior-figure" alt="Swagger Warrior">
-                            <div class="warrior-glow"></div>
-                        </div>
-                        <p class="skill-name">SWAGGER</p>
-                        <div class="skill-progress-container">
-                            <div class="skill-progress-bar" style="width: 75%;"></div>
+                    <!-- Tools & Cloud -->
+                    <div class="skill-category-box">
+                        <h4>Tools & Cloud</h4>
+                        <div class="skill-pills">
+                            <span class="skill-pill">Git</span>
+                            <span class="skill-pill">GitHub</span>
+                            <span class="skill-pill">Postman</span>
                         </div>
                     </div>
                 </div>
-            </div>
+
+            </div> <!-- End skills-outer-box -->
+
         </div>
     </section>
 
@@ -208,10 +201,18 @@
         <div class="projects-container">
             <!-- Left Side Details -->
             <div class="project-details" id="project-details-panel">
-                <h2 id="pd-title">Select a Project</h2>
-                <p id="pd-desc">Scroll or click a node to view project details.</p>
+                <div class="pd-header-group" style="justify-content: space-between;">
+                    <h2 id="pd-title">Select a Project</h2>
+                    <a id="pd-github-link" href="#" target="_blank" class="github-icon-btn" style="display: none;">
+                        <i class="fas fa-external-link-square-alt"></i>
+                    </a>
+                </div>
+                <div id="pd-tech-stack" class="tech-stack-container"></div>
+                <hr class="pd-divider" style="display: none;">
+                <ul id="pd-bullets" class="project-bullets">
+                    <li>Scroll or click a node to view project details.</li>
+                </ul>
                 <div id="pd-images" class="pd-images"></div>
-                <a id="pd-link" href="#" target="_blank" style="display: none;" class="btn-ancient">View on GitHub</a>
             </div>
 
             <!-- Right Side Shield Wheel -->
@@ -220,7 +221,7 @@
                 <div class="wheel" id="projects-wheel">
                     <!-- Rotating Crest Background -->
                     <img src="assets/images/royal_crest.png" class="shield-crest" alt="Rotating Crest">
-                    
+
                     <!-- Project Nodes -->
                     <div class="wheel-node active" data-project="vendor">
                         <div class="node-icon"><i class="fas fa-store"></i></div>
@@ -228,11 +229,11 @@
                     </div>
                     <div class="wheel-node" data-project="furrr">
                         <div class="node-icon"><i class="fas fa-paw"></i></div>
-                        <div class="node-label">FURRR</div>
+                        <div class="node-label">FURRR - AI petcare app</div>
                     </div>
-                    <!-- Placeholders to make it a full wheel -->
-                    <div class="wheel-node placeholder">
-                        <div class="node-icon"><i class="fas fa-lock"></i></div>
+                    <div class="wheel-node" data-project="safeorbit">
+                        <div class="node-icon"><i class="fas fa-shield-alt"></i></div>
+                        <div class="node-label">SafeOrbit</div>
                     </div>
                     <div class="wheel-node placeholder">
                         <div class="node-icon"><i class="fas fa-lock"></i></div>
@@ -258,7 +259,7 @@
                     <span>GITHUB</span>
                 </a>
                 <div class="connector-divider"></div>
-                <a href="https://linkedin.com/in/gayathrii3" class="connector-item" target="_blank">
+                <a href="#" class="connector-item">
                     <i class="fab fa-linkedin-in"></i>
                     <span>LINKEDIN</span>
                 </a>
@@ -272,10 +273,11 @@
 
         <!-- The Cinematic Hands -->
         <div id="hands-container">
-            <img src="assets/images/left hand.png" id="hand-left" class="hand" alt="Left Hand">
-            <img src="assets/images/right hand.png" id="hand-right" class="hand" alt="Right Hand">
+            <img src="assets/images/left_hand.png" id="hand-left" class="hand" alt="Left Hand">
+            <img src="assets/images/right_hand.png" id="hand-right" class="hand" alt="Right Hand">
         </div>
     </section>
+
 
 
     <!-- Section 2: The Kingdom & Union (Grand Finale) -->
@@ -293,6 +295,12 @@
 
 
     </div>
+
+    <!-- Custom Footer -->
+    <footer class="custom-footer">
+        <p class="footer-highlight">Made with ☕ , 💻 , and Magadheera Playlist</p>
+        <p class="footer-copyright">&copy; 2026 All Rights Reserved.</p>
+    </footer>
 
     <script src="js/script.js?v=5"></script>
 </body>
