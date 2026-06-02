@@ -397,9 +397,19 @@ h1, h2, h3 {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 60vw;
-    z-index: 20;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 30;
     opacity: 0;
+    pointer-events: none;
+}
+
+#main-title {
+    max-width: 45%;
+    height: auto;
+    filter: drop-shadow(0 0 30px var(--gold-glow));
 }
 
 #portal-frame {
@@ -657,16 +667,7 @@ h1, h2, h3 {
     text-shadow: 0 0 25px var(--gold-glow), 0 0 45px rgba(255, 215, 0, 0.3);
 }
 
-/* Specific Vintage Style for Projects Shield */
-.nav-icons li[data-section="projects-section"] .icon i {
-    filter: sepia(0.6) brightness(0.8) contrast(1.2) saturate(0.8);
-    display: inline-block;
-}
 
-.nav-icons li.active[data-section="projects-section"] .icon i {
-    filter: sepia(0.4) brightness(1.1) contrast(1.1) saturate(1.1);
-    text-shadow: 0 0 15px var(--gold-glow);
-}
 
 .nav-icons li.active::after {
     content: '';
@@ -1871,20 +1872,7 @@ h1, h2, h3 {
     margin-bottom: 5px;
 }
 
-#title-container {
-    position: absolute;
-    top: 2vh; /* Moved even higher to be clearly above the fort */
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    z-index: 30;
-    opacity: 0;
-}
 
-#main-title {
-    max-width: 40%; /* Reduced from 60% */
-    filter: drop-shadow(0 0 30px var(--gold-glow));
-}
 
 /* Navigation */
 #main-nav {
@@ -2140,7 +2128,7 @@ h1, h2, h3 {
 
 .footer-highlight {
     font-family: 'Cinzel', serif;
-    font-style: italic;
+    font-style: normal;
     font-weight: 700;
     font-size: 1.5rem;
     color: var(--gold);

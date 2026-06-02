@@ -211,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     gsap.set("#hand-left", { xPercent: -100, yPercent: -50, opacity: 0 });
     gsap.set("#hand-right", { xPercent: 100, yPercent: -50, opacity: 0 });
-    gsap.set("#title-container", { opacity: 0, y: -20 });
+    gsap.set("#title-container", { opacity: 0 });
     gsap.set("#portal-world", {
         scale: 1.2, // Increased scale to prevent edges showing during parallax
         y: "-5vh",  // Moved up slightly as requested
@@ -276,24 +276,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Make the fixed hero scroll away natively with the about section and disappear
-    gsap.fromTo("#portal-hero", 
-        { y: "25vh", scale: 1, opacity: 1 }, 
-        {
-            y: () => {
-                // Move up exactly by the height of the about section so it stays glued to the rock
-                return -document.querySelector("#about-section").offsetHeight;
-            },
-            opacity: 0, // Fade out as it leaves the screen
-            ease: "none",
-            scrollTrigger: {
-                trigger: "#about-section",
-                start: "top top", // When about section is at top of screen
-                end: "bottom top", // When about section scrolls completely out
-                scrub: true,
-                invalidateOnRefresh: true // Recalculate on resize
-            }
+    gsap.to("#portal-hero", {
+        y: () => {
+            // Move up exactly by the height of the about section so it stays glued to the rock
+            return -document.querySelector("#about-section").offsetHeight;
+        },
+        opacity: 0, // Fade out as it leaves the screen
+        ease: "none",
+        scrollTrigger: {
+            trigger: "#about-section",
+            start: "top top", // When about section is at top of screen
+            end: "bottom top", // When about section scrolls completely out
+            scrub: true,
+            invalidateOnRefresh: true // Recalculate on resize
         }
-    );
+    });
 
     // --- THE FINAL LANDING ---
     // The hero stays on the rock as the ultimate monument of your journey.
@@ -324,7 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    kingdomTimeline.to("#title-container", { opacity: 1, y: 0, duration: 2 });
+    kingdomTimeline.to("#title-container", { opacity: 1, duration: 2 });
 
     // Subtle Mouse Parallax for the 'Hole' (World and Frame)
     document.addEventListener('mousemove', (e) => {
