@@ -62,8 +62,44 @@
     <div id="portal-section">
         <!-- Portfolio and Date Display -->
         <div class="home-info-display">
-            <span class="home-title">PORTFOLIO</span>
-            <span id="home-date" class="home-date"></span>
+            <span class="home-title">MY PORTFOLIO</span>
+            <div class="scroll-widget" id="scroll-widget" title="Click to roll/unroll!">
+                <!-- Top Rod -->
+                <div class="scroll-rod top-rod">
+                    <div class="rod-knob left-knob"></div>
+                    <div class="rod-shaft"></div>
+                    <div class="rod-knob right-knob"></div>
+                </div>
+                
+                <!-- Paper Body Wrapper (expands vertically) -->
+                <div class="scroll-paper-wrapper">
+                    <div class="scroll-paper">
+                        <div class="scroll-content">
+                            <!-- Combined Date Header -->
+                            <div class="scroll-date-line" id="scroll-date-line">02 JUNE 2026</div>
+                            
+                            <!-- Vintage Divider -->
+                            <div class="scroll-divider"></div>
+                            
+                            <!-- What's New Section -->
+                            <div class="scroll-news-section">
+                                <div class="scroll-news-title">WHAT'S NEW</div>
+                                <ul class="scroll-news-list">
+                                    <li>Added FURRR AI Petcare App</li>
+                                    <li>Added SafeOrbit Heatmap Prototype</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Bottom Rod -->
+                <div class="scroll-rod bottom-rod">
+                    <div class="rod-knob left-knob"></div>
+                    <div class="rod-shaft"></div>
+                    <div class="rod-knob right-knob"></div>
+                </div>
+            </div>
         </div>
         <div id="portal-sticky-wrapper">
             <!-- The Portal World (inside the hole) -->
@@ -108,7 +144,7 @@
 
             <div class="about-socials">
                 <a href="https://github.com/gayathrii3" target="_blank"><i class="fab fa-github"></i></a>
-                <a href="#" class="linkedin-icon"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://www.linkedin.com/in/gayathrii-reddy" class="linkedin-icon" target="_blank"><i class="fab fa-linkedin-in"></i></a>
             </div>
         </div>
 
@@ -204,7 +240,7 @@
                 <div class="pd-header-group" style="justify-content: space-between;">
                     <h2 id="pd-title">Select a Project</h2>
                     <a id="pd-github-link" href="#" target="_blank" class="github-icon-btn" style="display: none;">
-                        <i class="fas fa-external-link-square-alt"></i>
+                        <i class="fab fa-github"></i>
                     </a>
                 </div>
                 <div id="pd-tech-stack" class="tech-stack-container"></div>
@@ -235,8 +271,9 @@
                         <div class="node-icon"><i class="fas fa-shield-alt"></i></div>
                         <div class="node-label">SafeOrbit</div>
                     </div>
-                    <div class="wheel-node placeholder">
-                        <div class="node-icon"><i class="fas fa-lock"></i></div>
+                    <div class="wheel-node" data-project="tradingbot">
+                        <div class="node-icon"><i class="fas fa-robot"></i></div>
+                        <div class="node-label">Trading Bot</div>
                     </div>
                     <div class="wheel-node placeholder">
                         <div class="node-icon"><i class="fas fa-lock"></i></div>
@@ -259,7 +296,7 @@
                     <span>GITHUB</span>
                 </a>
                 <div class="connector-divider"></div>
-                <a href="#" class="connector-item">
+                <a href="https://www.linkedin.com/in/gayathrii-reddy" class="connector-item" target="_blank">
                     <i class="fab fa-linkedin-in"></i>
                     <span>LINKEDIN</span>
                 </a>

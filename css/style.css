@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
 :root {
     --primary-red: #8B0000;
     --gold: #D4AF37;
@@ -76,6 +78,284 @@ h1, h2, h3 {
     letter-spacing: 2px;
     opacity: 0.7;
     font-weight: 300;
+}
+
+/* Vintage Twine-Wrapped Scroll Widget */
+.scroll-widget {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: auto; /* Enable hover/clicks */
+    margin-top: 15px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-drag: none;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.scroll-widget:hover {
+    transform: scale(1.03);
+}
+
+.scroll-rod {
+    position: relative;
+    width: 250px; /* Slightly wider than paper */
+    height: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+}
+
+.rod-shaft {
+    flex: 1;
+    height: 10px;
+    background: linear-gradient(
+        to bottom,
+        #2a1e12 0%,
+        #523b20 20%,
+        #c5a030 45%,
+        #f5dd90 50%,
+        #c5a030 55%,
+        #826322 80%,
+        #2a1e12 100%
+    );
+    border: 1px solid #4a351e;
+    box-shadow: 
+        0 2px 5px rgba(0, 0, 0, 0.4),
+        inset 0 1px 1px rgba(255, 255, 255, 0.2),
+        inset 0 -1px 1px rgba(0, 0, 0, 0.4);
+    border-radius: 4px;
+}
+
+.rod-knob {
+    width: 14px;
+    height: 16px;
+    background: linear-gradient(
+        to bottom,
+        #1c140c 0%,
+        #3d2b18 20%,
+        #a48425 45%,
+        #edd782 50%,
+        #a48425 55%,
+        #634b1a 80%,
+        #1c140c 100%
+    );
+    border: 1px solid #3d2b19;
+    box-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.4),
+        inset 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+
+.left-knob {
+    border-radius: 50% 2px 2px 50%;
+}
+
+.right-knob {
+    border-radius: 2px 50% 50% 2px;
+}
+
+.scroll-paper-wrapper {
+    position: relative;
+    width: 220px; /* Slightly narrower than rods */
+    height: 0px; /* Animated via JS from 0px to 220px */
+    overflow: hidden;
+    z-index: 5;
+    margin-top: -2px;
+    margin-bottom: -2px;
+    filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.45));
+    transition: height 0.1s linear; /* Smooth micro-transitions */
+}
+
+.scroll-paper {
+    width: 100%;
+    height: 220px; /* Adjusted height for news scroll */
+    background-color: #f6e6cd; /* Deeper vintage/warm antique gold-tan paper */
+    background-image: 
+        radial-gradient(circle at 50% 50%, rgba(246, 230, 205, 0) 50%, rgba(139, 90, 43, 0.25) 100%),
+        url('https://www.transparenttextures.com/patterns/parchment.png');
+    border-left: 1px solid rgba(139, 115, 85, 0.4);
+    border-right: 1px solid rgba(139, 115, 85, 0.4);
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding: 14px 18px;
+    
+    /* Jagged deckled edges */
+    clip-path: polygon(
+        0% 0%, 100% 0%,
+        99% 5%, 100% 10%, 98% 15%, 100% 20%, 99% 25%, 100% 30%, 98% 35%, 100% 40%, 99% 45%, 100% 50%,
+        98% 55%, 100% 60%, 99% 65%, 100% 70%, 98% 75%, 100% 80%, 99% 85%, 100% 90%, 98% 95%, 100% 100%,
+        0% 100%,
+        1% 95%, 0% 90%, 2% 85%, 0% 80%, 1% 75%, 0% 70%, 2% 65%, 0% 60%, 1% 55%, 0% 50%,
+        2% 45%, 0% 40%, 1% 35%, 0% 30%, 2% 25%, 0% 20%, 1% 15%, 0% 10%, 2% 5%
+    );
+    
+    /* Vintage burnt edge shadows */
+    box-shadow: 
+        inset 0 0 20px rgba(90, 50, 15, 0.55),
+        inset 0 0 5px rgba(90, 50, 15, 0.35);
+}
+
+/* Shadows inside scroll ends */
+.scroll-paper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.35), transparent);
+    z-index: 6;
+}
+
+.scroll-paper::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    background: linear-gradient(to top, rgba(0,0,0,0.35), transparent);
+    z-index: 6;
+}
+
+.scroll-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Flow from top */
+    opacity: 0; /* Animated in JS */
+}
+
+.scroll-date-line {
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #4a2e16;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4);
+    margin-bottom: 4px;
+}
+
+.scroll-divider {
+    width: 60%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #8b5a2b 50%, transparent);
+    position: relative;
+    margin: 8px 0;
+}
+
+.scroll-divider::before {
+    content: '◈';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #8b5a2b;
+    font-size: 0.6rem;
+    background: #f6e6cd; /* Matches the scroll body */
+    padding: 0 4px;
+}
+
+.scroll-news-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 6px;
+}
+
+.scroll-news-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: #8b5a2b;
+    margin-bottom: 8px;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+.scroll-news-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    text-align: left;
+}
+
+.scroll-news-list li {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    line-height: 1.3;
+    color: #5c3c1e;
+    font-weight: 600;
+    padding-left: 15px;
+    position: relative;
+}
+
+/* Bullet icon matching historical theme */
+.scroll-news-list li::before {
+    content: '✦';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #8b5a2b;
+    font-size: 0.65rem;
+}
+
+/* Mobile responsive scaling for scroll widget */
+@media (max-width: 768px) {
+    .scroll-widget {
+        margin-top: 10px;
+    }
+    .scroll-rod {
+        width: 190px;
+        height: 12px;
+    }
+    .rod-shaft {
+        height: 8px;
+    }
+    .rod-knob {
+        width: 10px;
+        height: 12px;
+    }
+    .scroll-paper-wrapper {
+        width: 170px;
+    }
+    .scroll-paper {
+        height: 170px; /* Adjusted height on mobile for news */
+        padding: 8px 10px;
+    }
+    .scroll-date-line {
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+    }
+    .scroll-divider {
+        margin: 4px 0;
+    }
+    .scroll-news-title {
+        font-size: 0.6rem;
+        margin-bottom: 4px;
+    }
+    .scroll-news-list {
+        gap: 3px;
+    }
+    .scroll-news-list li {
+        font-size: 0.6rem;
+        line-height: 1.2;
+        padding-left: 10px;
+    }
+    .scroll-news-list li::before {
+        font-size: 0.5rem;
+    }
 }
 
 /* Section 2: Kingdom & Union */
@@ -494,13 +774,15 @@ h1, h2, h3 {
 }
 
 #projects-section {
+    height: 100vh; /* Lock height to exactly 100vh for viewport pinning */
     min-height: 100vh;
+    box-sizing: border-box;
     background: #000;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 20px 0;
+    justify-content: flex-start; /* Flow from top */
+    padding: 40px 0 20px 0; /* Clear padding for elements */
     overflow: hidden;
 }
 
@@ -516,7 +798,8 @@ h1, h2, h3 {
     justify-content: center;
     margin: 0 auto;
     transform: none;
-    margin-bottom: -20px; /* Reduced gap */
+    margin-bottom: 10px;
+    flex-shrink: 0;
 }
 
 .section-bg {
@@ -1224,11 +1507,11 @@ h1, h2, h3 {
     box-shadow: 0 0 20px var(--gold-glow);
 }
 
-/* Shield Wheel UI */
 .projects-container {
     position: relative;
     width: 100%;
-    height: 100vh;
+    flex: 1; /* Automatically fill remaining viewport height */
+    min-height: 0; /* Critical for scrollable flex child containing text */
     display: flex;
     overflow: hidden;
     z-index: 10;
@@ -1238,18 +1521,64 @@ h1, h2, h3 {
     width: 45%;
     margin-left: 120px; /* Clear the 100px sidebar */
     align-self: center;
-    padding: 40px;
+    max-height: 85%; /* Keeps it fully within the section boundaries */
+    padding: 35px 40px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start; /* Start content flow at top */
     color: var(--text-light);
     z-index: 20;
     position: relative;
-    background: rgba(15, 10, 5, 0.75);
-    border: 1px solid rgba(212, 175, 55, 0.3);
+    background: rgba(10, 7, 3, 0.88); /* Slightly darker/more readable background */
+    border: 1px solid rgba(212, 175, 55, 0.35);
     border-radius: 12px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.8), inset 0 0 15px rgba(212,175,55,0.05);
-    backdrop-filter: blur(10px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.85), inset 0 0 15px rgba(212,175,55,0.05);
+    backdrop-filter: blur(15px);
+    overflow-y: auto; /* Scroll internally if content is too long */
+}
+
+/* Premium custom scrollbar for details panel */
+.project-details::-webkit-scrollbar {
+    width: 6px;
+}
+.project-details::-webkit-scrollbar-track {
+    background: rgba(212, 175, 55, 0.03);
+    border-radius: 10px;
+}
+.project-details::-webkit-scrollbar-thumb {
+    background: rgba(212, 175, 55, 0.25);
+    border-radius: 10px;
+}
+.project-details::-webkit-scrollbar-thumb:hover {
+    background: rgba(212, 175, 55, 0.55);
+}
+
+/* Premium Repository Button for GitHub Link */
+.github-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.5);
+    color: var(--gold);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%; /* Perfectly circular */
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4), inset 0 0 10px rgba(212, 175, 55, 0.05);
+}
+
+.github-icon-btn:hover {
+    background: var(--gold);
+    color: #0d0905;
+    border-color: var(--gold);
+    box-shadow: 0 0 20px var(--gold-glow);
+    transform: translateY(-2px);
+}
+
+.github-icon-btn i {
+    font-size: 1.4rem; /* Slightly larger icon */
 }
 
 .pd-header-group {
@@ -1359,7 +1688,7 @@ h1, h2, h3 {
     right: 0;
     top: 0;
     width: 50vw;
-    height: 100vh;
+    height: 100%;
     z-index: 15;
 }
 
@@ -1438,19 +1767,27 @@ h1, h2, h3 {
 
 .node-label {
     position: absolute;
-    left: -120px;
-    width: 100px;
+    right: 95px; /* Position to the horizontal left of the circular node, leaving 15px gap */
+    width: max-content;
+    max-width: 280px; /* Room for long project titles */
+    white-space: nowrap; /* Keep the project title on a single line */
     text-align: right;
     color: #fff;
     font-family: 'Cinzel', serif;
-    font-size: 1rem;
-    text-shadow: 0 0 5px rgba(0,0,0,0.8);
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-shadow: 0 0 8px rgba(0, 0, 0, 0.95), 0 0 4px rgba(212, 175, 55, 0.6);
     opacity: 0;
-    transition: opacity 0.3s;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transform: translateX(15px); /* Slide in from right */
 }
 
+.wheel-node:hover .node-label,
 .wheel-node.active .node-label {
     opacity: 1;
+    transform: translateX(0);
 }
 
 .project-point:hover .project-fort {
@@ -1818,4 +2155,91 @@ h1, h2, h3 {
     color: var(--text-light);
     opacity: 0.8;
     font-weight: 400;
+}
+
+/* Projects Section Responsive Mobile Adjustments */
+@media (max-width: 768px) {
+    #projects-section {
+        height: auto;
+        min-height: 100vh;
+        padding: 40px 0;
+        overflow-y: visible;
+    }
+
+    .projects-container {
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        overflow-y: visible;
+        height: auto;
+        flex: none;
+    }
+
+    .shield-wheel-wrapper {
+        position: relative;
+        width: calc(100% - 100px);
+        margin-left: 100px;
+        height: 320px;
+        flex-shrink: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .shield-base {
+        right: auto;
+        left: calc(50% + 50px);
+        top: 50%;
+        width: 250px;
+        height: 250px;
+        margin-left: -125px;
+        margin-top: -125px;
+        transform: translateY(0);
+    }
+
+    .wheel {
+        right: auto;
+        left: calc(50% + 50px);
+        top: 50%;
+        width: 250px;
+        height: 250px;
+        margin-left: -125px;
+        margin-top: -125px;
+        transform: translateY(0) rotate(0deg);
+    }
+
+    .shield-crest {
+        width: 90%;
+    }
+
+    .wheel-node {
+        width: 60px;
+        height: 60px;
+        margin-left: -30px;
+        margin-top: -30px;
+    }
+
+    .node-icon {
+        font-size: 1.5rem;
+    }
+
+    .node-label {
+        display: none !important; /* Hide circular labels on mobile to avoid screen overlap */
+    }
+
+    .project-details {
+        width: calc(100% - 130px);
+        margin-left: 115px;
+        margin-right: 15px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        max-height: none;
+        align-self: stretch;
+        padding: 25px;
+        overflow-y: visible;
+    }
+
+    .project-details h2 {
+        font-size: 1.7rem;
+    }
 }

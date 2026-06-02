@@ -2,12 +2,205 @@
 gsap.registerPlugin(ScrollTrigger);
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 0. Update Date
-    const dateElement = document.getElementById('home-date');
-    if (dateElement) {
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        dateElement.textContent = new Date().toLocaleDateString(undefined, options);
-    }
+    let positionWheelNodes;
+
+    const projectData = {
+        vendor: {
+            title: "Venue Booking App",
+            liveStatus: "",
+            desc: "Venue Booking App lets users browse, view, and book venues for events easily. I worked on user-side development focusing on API integration and functionality. Implemented features for venue browsing, booking, and smooth navigation. Handled API responses and displayed data effectively in the UI. Used Swagger for API testing and Figma for basic wireframe design. Built using Flutter, REST APIs, and Android UI with Git for version control.",
+            techStack: ["Flutter", "Dart", "SQL", "Swagger", "Figma"],
+            bullets: [
+                "Designed and developed a cross-platform venue booking application using Flutter and Dart.",
+                "Implemented user authentication (login/signup), profile management, booking calendar, and booking history features.",
+                "Managed backend data using SQL for user records and booking management.",
+                "Designed intuitive UI/UX wireframes and prototypes using Figma."
+            ],
+            images: [],
+            link: "https://github.com/gayathrii3/Venue_booking-Android-App.git",
+            dateAdded: "2026-01-10"
+        },
+        safeorbit: {
+            title: "SafeOrbit – Women's Safety",
+            liveStatus: "PROTOTYPE",
+            desc: "SafeOrbit is a Women's Night Safety System using real-time location-based safety heatmaps. It utilizes NLP to analyze public reviews and identify risk indicators.",
+            techStack: ["Python", "Flask", "SQLite", "NLP", "Heatmaps"],
+            bullets: [
+                "Built a real-time location-based safety heatmap system using public reviews + AI to classify safe vs unsafe zones.",
+                "Developed an NLP sentiment classifier (Python) to analyze textual reviews and detect risk indicators such as harassment, poorly lit areas, or crowd levels.",
+                "Designed color-coded safety heatmaps to help users navigate risky routes at night, integrating SOS alert routing and GPS tracking.",
+                "Analyzed 30+ public reviews, classified safety zones with NLP, improving risk identification accuracy and generating data-driven insights."
+            ],
+            images: [],
+            link: "https://github.com/gayathrii3/safeorbit---community-saferoute-system.git",
+            dateAdded: "2026-03-15"
+        },
+        furrr: {
+            title: "FURRR - AI petcare app",
+            liveStatus: "LIVE PROJECT",
+            desc: "Furrr is a Flutter-based pet care app offering real-time AI insights for pet health and behavior. It includes features like a smart symptom checker, behavior analyzer, and interactive bark/play system. The app provides text-to-speech support for accessible AI results. It features premium UI with animations, mascots, and a soft themed design. Users can find nearby vets, access Indian pet food safety guides, and view a YouTube-based pet feed. Built with Flutter, Gemini AI, Google APIs, and advanced animation tools for a seamless experience.",
+            techStack: ["Flutter (Dart)", "Python", "FastAPI", "Gemini AI"],
+            bullets: [
+                "Built a cross-platform mobile app for Indian dog owners with AI-powered health tools, breed-specific risk analysis for 9 breeds, and hyperlocal community features.",
+                "Integrated Google Gemini 2.0 Flash API for real-time wound analysis and symptom checking from uploaded photos.",
+                "Designed a Breed Health Risk Engine covering 9 breeds including Indian Indie dogs with age-filtered genetic risk predictions and prevention guidance.",
+                "Implemented vernacular language support in 4 languages (English, Hindi, Telugu, Tamil).",
+                "Designed interactive UI with animations, TTS (Text-to-Speech), and engaging pet activity features."
+            ],
+            images: [],
+            link: "https://github.com/gayathrii3/furrr_petcare_app.git",
+            dateAdded: "2026-05-20"
+        },
+        tradingbot: {
+            title: "Binance Futures Testnet Trading Bot (USDT-M)",
+            liveStatus: "TESTNET APP",
+            desc: "A Python application designed to place orders on the Binance Futures Testnet (USDT-M). It features a clean, professional, multi-layered architecture, strict pre-flight input validation, granular logging to both file and console, and robust error handling.",
+            techStack: ["Python", "Binance API", "CLI", "Logging", "Error Handling"],
+            bullets: [
+                "Order Types & Sides: Full support for both BUY and SELL across MARKET, LIMIT (GTC Time-In-Force), and STOP_LIMIT (underlying STOP order type with stopPrice and GTC Time-In-Force) orders.",
+                "Enhanced CLI UX: Standard argument parsing for flag-based orders, plus an Interactive Setup Wizard with live validation when running the script without flags.",
+                "Structured & Custom Logging: Outgoing request parameters, API payloads, network logs, and error traces are recorded in Logs/trading_bot.log, with clean, color-coded console logs.",
+                "Resilient Error Handling: Pre-flight local validation of parameters before sending, and elegant formatting of Binance API errors (BinanceAPIException) and connection failures."
+            ],
+            images: [],
+            link: "https://github.com/gayathrii3/Trading-bot.git",
+            dateAdded: "2026-06-02"
+        }
+    };
+
+    // 0. Vintage Parchment Scroll Initialization
+    const initScrollWidget = () => {
+        const scrollWidget = document.getElementById('scroll-widget');
+        const paperWrapper = document.querySelector('.scroll-paper-wrapper');
+        const paper = document.querySelector('.scroll-paper');
+        const content = document.querySelector('.scroll-content');
+        const dateLineEl = document.getElementById('scroll-date-line');
+
+        if (!scrollWidget || !paperWrapper || !paper || !content) return;
+
+        // Current Local Date
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = today.getMonth(); // 0..11
+        const currentDate = today.getDate(); // 1..31
+
+        // 1. Populate Date Line (Weekday, Day Month Year)
+        const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June", 
+            "July", "August", "September", "October", "November", "December"
+        ];
+        
+        const dayName = daysOfWeek[today.getDay()];
+        const monthName = monthNames[month].toUpperCase();
+        const dateStr = currentDate < 10 ? `0${currentDate}` : currentDate;
+
+        if (dateLineEl) {
+            dateLineEl.textContent = `${dayName}, ${dateStr} ${monthName} ${year}`;
+        }
+
+        // 1b. Populate "What's New" dynamically from projectData
+        const newsListEl = document.querySelector('.scroll-news-list');
+        if (newsListEl && typeof projectData !== 'undefined') {
+            const getNewsText = (proj) => {
+                if (proj.liveStatus === "PROTOTYPE") {
+                    return `Added ${proj.title} Prototype`;
+                } else if (proj.liveStatus === "TESTNET APP") {
+                    return `Added ${proj.title} Testnet App`;
+                } else {
+                    return `Added ${proj.title}`;
+                }
+            };
+
+            // Sort projects by dateAdded descending
+            const sortedProjects = Object.values(projectData)
+                .filter(proj => proj.dateAdded)
+                .sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded));
+
+            // Populate the top 2 latest projects
+            newsListEl.innerHTML = sortedProjects.slice(0, 2).map(proj => {
+                return `<li>${getNewsText(proj)}</li>`;
+            }).join('');
+        }
+
+        // 2. Roll/Unroll Animations
+        let scrollOpen = true;
+        let isAnimating = false;
+
+        const getTargetHeight = () => paper.offsetHeight || 220;
+
+        const unrollScroll = (delay = 0.5) => {
+            isAnimating = true;
+            const targetHeight = getTargetHeight();
+            
+            // Set initial state
+            gsap.set(paperWrapper, { height: 0 });
+            gsap.set(content, { opacity: 0 });
+
+            const tl = gsap.timeline({
+                onComplete: () => {
+                    isAnimating = false;
+                    scrollOpen = true;
+                }
+            });
+
+            tl.to(paperWrapper, {
+                height: targetHeight,
+                duration: 1.8,
+                ease: "power3.inOut",
+                delay: delay
+            })
+            .to(content, {
+                opacity: 1,
+                duration: 0.6,
+                ease: "power2.out"
+            }, "-=0.6");
+        };
+
+        const rollUpScroll = () => {
+            isAnimating = true;
+            const tl = gsap.timeline({
+                onComplete: () => {
+                    isAnimating = false;
+                    scrollOpen = false;
+                }
+            });
+
+            tl.to(content, {
+                opacity: 0,
+                duration: 0.3,
+                ease: "power2.in"
+            })
+            .to(paperWrapper, {
+                height: 0,
+                duration: 1.4,
+                ease: "power3.inOut"
+            }, "-=0.1");
+        };
+
+        // Initial Unroll
+        unrollScroll(0.8);
+
+        // Click to roll/unroll toggle
+        scrollWidget.addEventListener('click', () => {
+            if (isAnimating) return;
+            if (scrollOpen) {
+                rollUpScroll();
+            } else {
+                unrollScroll(0);
+            }
+        });
+
+        // Responsive position correction during resize
+        window.addEventListener('resize', () => {
+            if (scrollOpen && !isAnimating) {
+                // Instantly update the wrapper height to match the new scaled CSS height
+                gsap.set(paperWrapper, { height: getTargetHeight() });
+            }
+        });
+    };
+
+    initScrollWidget();
 
     // 1. Initial State Setup
     gsap.set("#portal-hero", {
@@ -296,55 +489,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const pdDivider = document.querySelector('.pd-divider');
     const pdImages = document.getElementById('pd-images');
 
-    const projectData = {
-        vendor: {
-            title: "Venue Booking App",
-            liveStatus: "",
-            desc: "Venue Booking App lets users browse, view, and book venues for events easily. I worked on user-side development focusing on API integration and functionality. Implemented features for venue browsing, booking, and smooth navigation. Handled API responses and displayed data effectively in the UI. Used Swagger for API testing and Figma for basic wireframe design. Built using Flutter, REST APIs, and Android UI with Git for version control.",
-            techStack: ["Flutter", "Dart", "SQL", "Swagger", "Figma"],
-            bullets: [
-                "Designed and developed a cross-platform venue booking application using Flutter and Dart.",
-                "Implemented user authentication (login/signup), profile management, booking calendar, and booking history features.",
-                "Managed backend data using SQL for user records and booking management.",
-                "Designed intuitive UI/UX wireframes and prototypes using Figma."
-            ],
-            images: [],
-            link: "#"
-        },
-        furrr: {
-            title: "FURRR - AI petcare app",
-            liveStatus: "LIVE PROJECT",
-            desc: "Furrr is a Flutter-based pet care app offering real-time AI insights for pet health and behavior. It includes features like a smart symptom checker, behavior analyzer, and interactive bark/play system. The app provides text-to-speech support for accessible AI results. It features premium UI with animations, mascots, and a soft themed design. Users can find nearby vets, access Indian pet food safety guides, and view a YouTube-based pet feed. Built with Flutter, Gemini AI, Google APIs, and advanced animation tools for a seamless experience.",
-            techStack: ["Flutter (Dart)", "Python", "FastAPI", "Gemini AI"],
-            bullets: [
-                "Built a cross-platform mobile app for Indian dog owners with AI-powered health tools, breed-specific risk analysis for 9 breeds, and hyperlocal community features.",
-                "Integrated Google Gemini 2.0 Flash API for real-time wound analysis and symptom checking from uploaded photos.",
-                "Designed a Breed Health Risk Engine covering 9 breeds including Indian Indie dogs with age-filtered genetic risk predictions and prevention guidance.",
-                "Implemented vernacular language support in 4 languages (English, Hindi, Telugu, Tamil).",
-                "Designed interactive UI with animations, TTS (Text-to-Speech), and engaging pet activity features."
-            ],
-            images: [],
-            link: "https://github.com/gayathrii3/furrr_petcare_app.git"
-        },
-        safeorbit: {
-            title: "SafeOrbit – Women's Safety",
-            liveStatus: "PROTOTYPE",
-            desc: "SafeOrbit is a Women's Night Safety System using real-time location-based safety heatmaps. It utilizes NLP to analyze public reviews and identify risk indicators.",
-            techStack: ["Python", "Flask", "SQLite", "NLP", "Heatmaps"],
-            bullets: [
-                "Built a real-time location-based safety heatmap system using public reviews + AI to classify safe vs unsafe zones.",
-                "Developed an NLP sentiment classifier (Python) to analyze textual reviews and detect risk indicators such as harassment, poorly lit areas, or crowd levels.",
-                "Designed color-coded safety heatmaps to help users navigate risky routes at night, integrating SOS alert routing and GPS tracking.",
-                "Analyzed 30+ public reviews, classified safety zones with NLP, improving risk identification accuracy and generating data-driven insights."
-            ],
-            images: [],
-            link: "#"
-        }
-    };
+
 
     if (wheel && nodes.length > 0) {
-        // We wait a tick so offsetWidth is accurate
-        setTimeout(() => {
+        positionWheelNodes = () => {
             const radius = wheel.offsetWidth / 2;
             const totalNodes = nodes.length;
             const angleStep = 360 / totalNodes;
@@ -360,25 +508,56 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 gsap.set(node, { x: x, y: y });
             });
+        };
 
-            // ScrollTrigger for the wheel pinning and rotating
-            gsap.to(wheel, {
-                rotation: 360,
-                ease: "none",
-                scrollTrigger: {
-                    trigger: projectsSection,
-                    start: "top top",
-                    end: "+=2000", // Pin for 2000px of scrolling
-                    scrub: 1,
-                    pin: true,
-                    onUpdate: (self) => {
-                        const currentRotation = self.progress * 360;
-                        // Counter-rotate the icons so they stay upright
-                        gsap.set(".node-icon i", {
-                            rotation: -currentRotation
-                        });
+        // We wait a tick so offsetWidth is accurate
+        setTimeout(() => {
+            positionWheelNodes();
+
+            // ScrollTrigger for the wheel pinning and rotating (Responsive Layouts)
+            const mm = gsap.matchMedia();
+
+            // Desktop layout (pin section and rotate wheel)
+            mm.add("(min-width: 769px)", () => {
+                gsap.to(wheel, {
+                    rotation: 360,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: projectsSection,
+                        start: "top top",
+                        end: "+=2000", // Pin for 2000px of scrolling
+                        scrub: 1,
+                        pin: true,
+                        onUpdate: (self) => {
+                            const currentRotation = self.progress * 360;
+                            // Counter-rotate the entire wheel nodes so they stay upright and labels remain horizontal
+                            gsap.set(".wheel-node", {
+                                rotation: -currentRotation
+                            });
+                        }
                     }
-                }
+                });
+            });
+
+            // Mobile/Tablet layout (no pinning, rotate wheel as section scrolls by)
+            mm.add("(max-width: 768px)", () => {
+                gsap.to(wheel, {
+                    rotation: 360,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: projectsSection,
+                        start: "top bottom",
+                        end: "bottom top",
+                        scrub: 1,
+                        onUpdate: (self) => {
+                            const currentRotation = self.progress * 360;
+                            // Counter-rotate the entire wheel nodes so they stay upright
+                            gsap.set(".wheel-node", {
+                                rotation: -currentRotation
+                            });
+                        }
+                    }
+                });
             });
 
             // Node click handlers
@@ -392,8 +571,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         const data = projectData[key];
                         pdTitle.textContent = data.title;
                         
-                        pdGithubLink.href = data.link || '#';
-                        pdGithubLink.style.display = 'inline-flex';
+                        if (data.link && data.link !== '#') {
+                            pdGithubLink.href = data.link;
+                            pdGithubLink.style.display = 'inline-flex';
+                        } else {
+                            pdGithubLink.style.display = 'none';
+                        }
 
                         if (pdDivider) pdDivider.style.display = 'block';
 
@@ -431,6 +614,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const firstActive = document.querySelector('.wheel-node.active') || nodes[0];
             if (firstActive) firstActive.click();
         }, 100);
+
+        // Update wheel positions on resize
+        window.addEventListener('resize', positionWheelNodes);
     }
     /* ---------------------------------- */
 
@@ -447,4 +633,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 8. Skills Slider: Auto-Scroll + Manual Controls
     // Note: The scrolling soldiers and slider have been removed to give a more professional look.
+
+    // 9. Progressive and Final ScrollTrigger Refresh (Avoid delays/shifts from huge images loading)
+    document.querySelectorAll('img').forEach(img => {
+        if (img.complete) {
+            ScrollTrigger.refresh();
+        } else {
+            img.addEventListener('load', () => {
+                ScrollTrigger.refresh();
+            });
+        }
+    });
+
+    window.addEventListener('load', () => {
+        ScrollTrigger.refresh();
+        if (positionWheelNodes) {
+            positionWheelNodes();
+        }
+        // Force a resize event to trigger all responsive layouts (wheel & calendar)
+        window.dispatchEvent(new Event('resize'));
+    });
 });
